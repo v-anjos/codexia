@@ -1,45 +1,55 @@
-import { Terminal, ArrowRight, Code2 } from 'lucide-react'
+import { useState } from 'react'
+import { Sidebar, type Page } from './components/layout/Sidebar'
+import { Header } from './components/layout/Header'
+import { Dashboard } from './pages/Dashboard'
+
+const pageTitles: Record<Page, string> = {
+  dashboard: 'Dashboard',
+  aprender: 'Aprender',
+  conquistas: 'Conquistas',
+  perfil: 'Meu perfil',
+}
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<Page>('dashboard')
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
-    <main className="min-h-screen bg-background flex items-center justify-center p-6">
-      <div className="max-w-xl text-center">
+    <div className="min-h-screen bg-background text-white">
+      <Sidebar
+        currentPage={currentPage}
+        onNavigate={setCurrentPage}
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
 
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="bg-primary p-3 rounded-xl">
-            <Terminal size={30} />
-          </div>
+      <div className="min-h-screen md:ml-64">
+        <Header
+          title={pageTitles[currentPage]}
+          onMenuClick={() => setMenuOpen(true)}
+        />
 
-          <h1 className="text-4xl font-bold tracking-tight">
-            codexia<span className="text-accent">_</span>
-          </h1>
-        </div>
-
-        <div className="inline-flex items-center gap-2 bg-surface border border-slate-700 rounded-full px-4 py-2 mb-6 text-sm text-accent">
-          <Code2 size={16} />
-          Sua jornada começa aqui
-        </div>
-
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Aprenda a programar.
-          <span className="text-primary"> Evolua a cada desafio.</span>
-        </h2>
-
-        <p className="text-muted text-lg mb-8">
-          Domine os fundamentos da linguagem C com lições
-          interativas, desafios práticos e uma jornada gamificada.
-        </p>
-
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 bg-primary hover:bg-violet-500 transition-colors px-6 py-3 rounded-xl font-semibold"
-        >
-          Começar jornada
-          <ArrowRight size={18} />
-        </button>
-
+        <main className="p-5 md:p-8">
+          {currentPage === 'dashboard' ? (
+            <Dashboard
+              onStartLearning={() => setCurrentPage('aprender')}
+            />
+          ) : (
+            <section className="mx-auto max-w-6xl rounded-2xl border border-slate-800 bg-surface p-8">
+              <p className="mb-2 text-sm font-semibold text-accent">
+                EM DESENVOLVIMENTO
+              </p>
+              <h2 className="mb-3 text-2xl font-bold">
+                {pageTitles[currentPage]}
+              </h2>
+              <p className="text-muted">
+                Esta seção será implementada nas próximas etapas da Codexia.
+              </p>
+            </section>
+          )}
+        </main>
       </div>
-    </main>
+    </div>
   )
 }
 
