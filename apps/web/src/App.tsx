@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Sidebar, type Page } from './components/layout/Sidebar'
 import { Header } from './components/layout/Header'
 import { Dashboard } from './pages/Dashboard'
+import { Learn } from './pages/Learn'
 
 const pageTitles: Record<Page, string> = {
   dashboard: 'Dashboard',
@@ -32,21 +33,23 @@ function App() {
         <main className="p-5 md:p-8">
           {currentPage === 'dashboard' ? (
             <Dashboard
-              onStartLearning={() => setCurrentPage('aprender')}
-            />
-          ) : (
-            <section className="mx-auto max-w-6xl rounded-2xl border border-slate-800 bg-surface p-8">
-              <p className="mb-2 text-sm font-semibold text-accent">
-                EM DESENVOLVIMENTO
-              </p>
-              <h2 className="mb-3 text-2xl font-bold">
-                {pageTitles[currentPage]}
-              </h2>
-              <p className="text-muted">
-                Esta seção será implementada nas próximas etapas da Codexia.
-              </p>
-            </section>
-          )}
+    onStartLearning={() => setCurrentPage('aprender')}
+  />
+) : currentPage === 'aprender' ? (
+ <Learn />
+) : (
+  <section className="mx-auto max-w-6xl rounded-2xl border border-slate-800 bg-surface p-8">
+    <p className="mb-2 text-sm font-semibold text-accent">
+      EM DESENVOLVIMENTO
+    </p>
+    <h2 className="mb-3 text-2xl font-bold">
+      {pageTitles[currentPage]}
+    </h2>
+    <p className="text-muted">
+      Esta seção será implementada nas próximas etapas da Codexia.
+    </p>
+  </section>
+)}
         </main>
       </div>
     </div>
