@@ -1,7 +1,5 @@
 
-import { useState } from 'react'
 import {
-  ArrowLeft,
   BookOpen,
   CheckCircle2,
   Clock3,
@@ -9,10 +7,17 @@ import {
   LockKeyhole,
   Play,
 } from 'lucide-react'
-import { learningPath, type Lesson } from '../data/learningPath'
+import { learningPath} from '../data/learningPath'
 
-export function Learn() {
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
+type LearnProps = {
+  completedLessonIds: string[]
+  onStartLesson: () => void
+}
+
+export function Learn({
+  completedLessonIds,
+  onStartLesson,
+}: LearnProps) {
 
   const totalLessons = learningPath.reduce(
     (total, unit) => total + unit.lessons.length,
@@ -20,51 +25,10 @@ export function Learn() {
   )
 
   // O progresso será integrado ao sistema de lições futuramente.
-  const completedLessons = 0
+  const completedLessons = completedLessonIds.length
   const progress = Math.round((completedLessons / totalLessons) * 100)
 
-  if (selectedLesson) {
-    return (
-      <div className="mx-auto max-w-3xl space-y-6">
-        <button
-          type="button"
-          onClick={() => setSelectedLesson(null)}
-          className="flex items-center gap-2 text-muted hover:text-white"
-        >
-          <ArrowLeft size={18} />
-          Voltar à trilha
-        </button>
-
-        <section className="rounded-2xl border border-slate-800 bg-surface p-8">
-          <span className="text-sm font-semibold text-accent">
-            PRÓXIMA LIÇÃO
-          </span>
-
-          <h2 className="mt-3 text-3xl font-bold">
-            {selectedLesson.title}
-          </h2>
-
-          <p className="mt-4 text-muted">
-            {selectedLesson.description}
-          </p>
-
-          <div className="mt-6 flex items-center gap-2 text-sm text-muted">
-            <Clock3 size={17} />
-            {selectedLesson.duration} minutos estimados
-          </div>
-
-          <div className="mt-8 rounded-xl border border-violet-500/30 bg-primary/10 p-5">
-            <p className="font-semibold">Conteúdo em preparação</p>
-            <p className="mt-2 text-sm text-muted">
-              A experiência interativa desta lição será desenvolvida
-              na próxima etapa da Codexia.
-            </p>
-          </div>
-        </section>
-      </div>
-    )
-  }
-
+  
   return (
     <div className="mx-auto max-w-5xl space-y-8">
       <section className="rounded-2xl border border-violet-500/30 bg-gradient-to-r from-violet-950 to-surface p-6 md:p-8">
@@ -125,6 +89,7 @@ export function Learn() {
             <div className="space-y-3 p-4 md:p-6">
               {unit.lessons.map((lesson, lessonIndex) => {
                 const available = unitIndex === 0 && lessonIndex === 0
+		const completed = completedLessonIds.includes(lesson.id)
 
                 return (
                   <div
@@ -160,27 +125,27 @@ export function Learn() {
                       </p>
                     </div>
 
-                    {available ? (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedLesson(lesson)}
-                        className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-semibold hover:bg-violet-500"
-                      >
-                        <Play size={16} />
-                        Iniciar
-                      </button>
-                    ) : (
-                      <span className="flex items-center gap-2 text-sm text-muted">
-                        <LockKeyhole size={15} />
-                        Bloqueada
-                      </span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+                   {available ? (
+  <button
+    type="button"
+    onClick={onStartLesson}
+    className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-semibold hover:bg-violet-500"
+  >
+    <Play size={16} />
+    {completed ? 'Revisar' : 'Iniciar'}
+  </button>
+) : (
+  <span className="flex items-center gap-2 text-sm text-muted">
+    <LockKeyhole size={15} />
+    Bloqueada
+  </span>
+)}
+        </div>
+        )
+      })}
+      </div>
           </section>
-        ))}
+    ))}
       </div>
 
       <div className="flex items-center gap-3 rounded-xl border border-slate-800 bg-surface p-5">
