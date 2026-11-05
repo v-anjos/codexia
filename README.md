@@ -21,17 +21,27 @@ A primeira trilha educacional será dedicada à **linguagem C**, com foco em ini
 
 ## ✨ Funcionalidades
 
-### Em desenvolvimento
+### Implementadas
 
 - [x] Protótipo inicial em HTML.
 - [x] Configuração do frontend com React e TypeScript.
 - [x] Configuração do Vite.
-- [ ] Design system e identidade visual dark mode.
-- [ ] Layout responsivo e navegação.
-- [ ] Dashboard do estudante.
-- [ ] Trilhas de aprendizagem.
-- [ ] Sistema de lições e exercícios.
-- [ ] Acompanhamento do progresso.
+- [x] Identidade visual dark mode.
+- [x] Layout responsivo e navegação lateral.
+- [x] Dashboard inicial do estudante.
+- [x] Trilha introdutória de programação em C.
+- [x] Organização das unidades e lições.
+- [x] Primeira lição interativa: O que é programação?
+- [x] Quiz com feedback imediato.
+- [x] Sistema inicial de XP.
+- [x] Persistência local do progresso com localStorage.
+
+### Em desenvolvimento
+
+- [ ] Desbloqueio progressivo das lições.
+- [ ] Segunda lição: Seu primeiro programa em C.
+- [ ] Editor interativo de código.
+- [ ] Acompanhamento completo do progresso.
 
 ### Planejadas
 
@@ -71,22 +81,32 @@ A primeira trilha educacional será dedicada à **linguagem C**, com foco em ini
 - Ambiente isolado para execução segura.
 - Testes automatizados para avaliação das soluções.
 
-## 📁 Estrutura do projeto
-
-```text
 codexia/
 ├── apps/
 │   └── web/
 │       ├── public/
 │       ├── src/
+│       │   ├── components/
+│       │   │   └── layout/
+│       │   │       ├── Header.tsx
+│       │   │       └── Sidebar.tsx
+│       │   ├── data/
+│       │   │   ├── firstLesson.ts
+│       │   │   ├── learningPath.ts
+│       │   │   └── progress.ts
+│       │   ├── pages/
+│       │   │   ├── Dashboard.tsx
+│       │   │   ├── InteractiveLesson.tsx
+│       │   │   └── Learn.tsx
+│       │   ├── App.tsx
+│       │   ├── index.css
+│       │   └── main.tsx
 │       ├── package.json
 │       └── vite.config.ts
 ├── docs/
 │   └── prototypes/
 │       └── index-v0.1.html
-├── README.md
-└── .git/
-```
+└── README.md
 
 A estrutura será expandida conforme os módulos forem implementados.
 
@@ -160,15 +180,19 @@ O desempenho do estudante será utilizado para acompanhar sua evolução e ident
 | 1 | Planejamento e requisitos | Concluído |
 | 2 | Protótipo HTML inicial | Concluído |
 | 3 | Configuração React + TypeScript | Concluído |
-| 4 | Design system e identidade visual | Em desenvolvimento |
-| 5 | Layout e navegação | Planejado |
-| 6 | Dashboard do estudante | Planejado |
-| 7 | Trilhas e lições de C | Planejado |
-| 8 | Editor e execução de código | Planejado |
-| 9 | Backend e banco de dados | Planejado |
-| 10 | Gamificação e progresso | Planejado |
-| 11 | Testes e segurança | Planejado |
-| 12 | Publicação da plataforma | Planejado |
+| 4 | Design system e identidade visual | Concluído |
+| 5 | Layout e navegação | Concluído |
+| 6 | Dashboard inicial | Concluído |
+| 7 | Trilha introdutória de C | Concluído |
+| 8 | Primeira lição interativa e quiz | Concluído |
+| 9 | XP e persistência local | Concluído |
+| 10 | Segunda lição e desbloqueio progressivo | Próxima etapa |
+| 11 | Motor reutilizável de lições | Planejado |
+| 12 | Editor e execução de código C | Planejado |
+| 13 | Backend e banco de dados | Planejado |
+| 14 | Autenticação e perfis | Planejado |
+| 15 | Gamificação avançada | Planejado |
+| 16 | Testes, segurança e publicação | Planejado |
 
 ## 🤝 Contribuições
 
