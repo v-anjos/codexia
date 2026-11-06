@@ -9,7 +9,7 @@ import {
   loadProgress,
   saveProgress,
 } from './data/progress'
-import { firstLesson } from './data/firstLesson'
+import { lessonCatalog } from './data/lessons'
 
 const pageTitles: Record<Page, string> = {
   dashboard: 'Dashboard',
@@ -22,24 +22,33 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
   const [menuOpen, setMenuOpen] = useState(false)
   const [progress, setProgress] = useState(loadProgress)
-const [lessonOpen, setLessonOpen] = useState(false)
+const [activeLessonId, setActiveLessonId] = useState<string | null>(null)
+
+const activeLesson = activeLessonId
+  ? lessonCatalog[activeLessonId]
+  : undefined
 
 useEffect(() => {
   saveProgress(progress)
 }, [progress])
 
-function completeFirstLesson() {
+
+function completeLesson(lessonId: string) {
+  const lesson = lessonCatalog[lessonId]
+
+  if (!lesson) return
+
   setProgress((current) => {
-    if (current.completedLessonIds.includes(firstLesson.id)) {
+    if (current.completedLessonIds.includes(lessonId)) {
       return current
     }
 
     return {
       completedLessonIds: [
         ...current.completedLessonIds,
-        firstLesson.id,
+        lessonId,
       ],
-      xp: current.xp + firstLesson.xp,
+      xp: current.xp + lesson.xp,
     }
   })
 }
@@ -49,26 +58,31 @@ function completeFirstLesson() {
       <Sidebar
         currentPage={currentPage}
         onNavigate={(page) => {
- 	setLessonOpen(false)
-  	setCurrentPage(page)
-	}}
+  setActiveLessonId(null)
+  setCurrentPage(page)
+}}
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
       />
 
       <div className="min-h-screen md:ml-64">
         <Header
-          title={pageTitles[currentPage]}
-          onMenuClick={() => setMenuOpen(true)}
-          xp={progress.xp}
-        />
+  title={activeLesson ? activeLesson.title : pageTitles[currentPage]}
+  onMenuClick={() => setMenuOpen(true)}
+  xp={progress.xp}
+/>
 
-        <main className="p-5 md:p-8">
-  {lessonOpen ? (
+        
+<main className="p-5 md:p-8">
+  {activeLesson ? (
     <InteractiveLesson
-      alreadyCompleted={progress.completedLessonIds.includes(firstLesson.id)}
-      onComplete={completeFirstLesson}
-      onExit={() => setLessonOpen(false)}
+      key={activeLesson.id}
+      lesson={activeLesson}
+      alreadyCompleted={progress.completedLessonIds.includes(
+        activeLesson.id,
+      )}
+      onComplete={() => completeLesson(activeLesson.id)}
+      onExit={() => setActiveLessonId(null)}
     />
   ) : currentPage === 'dashboard' ? (
     <Dashboard
@@ -77,7 +91,7 @@ function completeFirstLesson() {
   ) : currentPage === 'aprender' ? (
     <Learn
       completedLessonIds={progress.completedLessonIds}
-      onStartLesson={() => setLessonOpen(true)}
+      onStartLesson={setActiveLessonId}
     />
   ) : (
     <section className="mx-auto max-w-6xl rounded-2xl border border-slate-800 bg-surface p-8">
@@ -93,6 +107,7 @@ function completeFirstLesson() {
     </section>
   )}
 </main>
+
       </div>
     </div>
   )

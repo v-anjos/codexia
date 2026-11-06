@@ -8,10 +8,11 @@ import {
   Play,
 } from 'lucide-react'
 import { learningPath} from '../data/learningPath'
+import { lessonCatalog } from '../data/lessons'
 
 type LearnProps = {
   completedLessonIds: string[]
-  onStartLesson: () => void
+  onStartLesson: (lessonID: string) => void
 }
 
 export function Learn({
@@ -88,8 +89,18 @@ export function Learn({
 
             <div className="space-y-3 p-4 md:p-6">
               {unit.lessons.map((lesson, lessonIndex) => {
-                const available = unitIndex === 0 && lessonIndex === 0
-		const completed = completedLessonIds.includes(lesson.id)
+const previousLesson =
+  lessonIndex > 0
+    ? unit.lessons[lessonIndex - 1]
+    : learningPath[unitIndex - 1]?.lessons.at(-1)
+
+const hasContent = lesson.id in lessonCatalog
+
+const available =
+  hasContent &&
+  (!previousLesson || completedLessonIds.includes(previousLesson.id))
+
+const completed = completedLessonIds.includes(lesson.id)
 
                 return (
                   <div
@@ -128,7 +139,7 @@ export function Learn({
                    {available ? (
   <button
     type="button"
-    onClick={onStartLesson}
+    onClick={() => onStartLesson(lesson.id)}
     className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-semibold hover:bg-violet-500"
   >
     <Play size={16} />

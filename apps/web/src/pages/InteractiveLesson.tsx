@@ -1,5 +1,6 @@
 
 import { useState } from 'react'
+import type { LessonContent } from '../data/lessons'
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,15 +10,16 @@ import {
   Trophy,
   XCircle,
 } from 'lucide-react'
-import { firstLesson } from '../data/firstLesson'
 
 type InteractiveLessonProps = {
+  lesson: LessonContent
   alreadyCompleted: boolean
   onComplete: () => void
   onExit: () => void
 }
 
 export function InteractiveLesson({
+  lesson,
   alreadyCompleted,
   onComplete,
   onExit,
@@ -27,13 +29,13 @@ export function InteractiveLesson({
   const [confirmed, setConfirmed] = useState(false)
   const [finished, setFinished] = useState(false)
 
-  const sectionsCount = firstLesson.sections.length
-  const totalSteps = sectionsCount + firstLesson.questions.length
+  const sectionsCount = lesson.sections.length
+  const totalSteps = sectionsCount + lesson.questions.length
   const isReading = step < sectionsCount
   const questionIndex = step - sectionsCount
   const question = isReading
     ? null
-    : firstLesson.questions[questionIndex]
+    : lesson.questions[questionIndex]
 
   const correct = question !== null &&
     selected === question.correctAnswer
@@ -67,11 +69,12 @@ export function InteractiveLesson({
         </h2>
 
         <p className="mt-4 text-muted">
-          Você aprendeu os primeiros conceitos de programação.
-        </p>
+  Você concluiu a lição "{lesson.title}"!
+  Continue praticando para evoluir na programação.
+</p>
 
         <p className="mt-6 text-2xl font-bold text-accent">
-          {alreadyCompleted ? 'Lição revisada' : `+${firstLesson.xp} XP`}
+          {alreadyCompleted ? 'Lição revisada' : `+${lesson.xp} XP`}
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -109,7 +112,7 @@ export function InteractiveLesson({
 
       <div>
         <div className="mb-3 flex justify-between text-sm text-muted">
-          <span>{firstLesson.title}</span>
+          <span>{lesson.title}</span>
           <span>Etapa {step + 1} de {totalSteps}</span>
         </div>
 
@@ -138,12 +141,18 @@ export function InteractiveLesson({
             </p>
 
             <h2 className="text-2xl font-bold">
-              {firstLesson.sections[step].title}
+              {lesson.sections[step].title}
             </h2>
 
-            <p className="mt-5 leading-8 text-slate-300">
-              {firstLesson.sections[step].content}
-            </p>
+            {lesson.sections[step].title === 'Seu primeiro código' ? (
+  <pre className="mt-5 overflow-x-auto rounded-xl border border-slate-700 bg-background p-5 font-mono text-sm leading-7 text-accent">
+    <code>{lesson.sections[step].content}</code>
+  </pre>
+) : (
+  <p className="mt-5 leading-8 text-slate-300">
+    {lesson.sections[step].content}
+  </p>
+)}
 
             <button
               type="button"
